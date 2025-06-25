@@ -1021,24 +1021,19 @@
             const sortOrder = document.getElementById('sort-order').value;
             const limit = document.getElementById('result-limit').value;
 
-            if (!query) {
-                showSearchResults(conversationsData.slice(0, 25));
-                return;
-            }
-
             let results;
-            
+
             if (searchType === 'tags') {
                 // Tag-based search
                 const tagNames = query.split(',').map(tag => tag.trim()).filter(tag => tag);
-                results = searchConversationsByTags(tagNames);
+                results = tagNames.length === 0 ? [...conversationsData] : searchConversationsByTags(tagNames);
             } else {
-                // Traditional content search
+                // Traditional content search (title, content, or both)
                 results = searchConversations(query, searchType);
             }
-            
+
             results = sortResults(results, sortOrder);
-            
+
             if (limit !== 'all') {
                 results = results.slice(0, parseInt(limit));
             }
